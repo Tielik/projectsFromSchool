@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scalene Triangle Painter</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    canvas {
+        border: 2px solid #333;
+        cursor: crosshair;
+    }
+    #instructions {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+<div id="instructions">
+    <h2>Scalene Triangle Painter</h2>
+    <p>Click three points on the canvas to define the vertices of a scalene triangle.</p>
+    <label for="colorpicker">Color Picker:</label>
+   <input type="color" id="colorpicker" value="#0000ff">
+   <label for="bordercolorpicker">Border Color Picker:</label>
+<input type="color" id="bordercolorpicker" value="#000000">
+<button id="clearCanvasButton">Clear Canvas</button>
+</div>
+<script>
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+let clickCount = 0;
+let points = [];
+const colorPicker=document.getElementById('colorpicker');
+const borderColorPicker = document.getElementById('bordercolorpicker');
+
+const clearCanvasButton = document.getElementById('clearCanvasButton');
+
+clearCanvasButton.addEventListener('click', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+canvas.addEventListener('click', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    points.push({ x, y });
+    clickCount++;
+
+    if (clickCount === 3) {
+        let selectedColor= colorPicker.value;
+        let selectedBorderColor = borderColorPicker.value;
+
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        ctx.lineTo(points[1].x, points[1].y);
+        ctx.lineTo(points[2].x, points[2].y);
+        ctx.closePath();
+        ctx.fillStyle = selectedColor;
+        ctx.fill();
+        ctx.strokeStyle = selectedBorderColor;
+        ctx.stroke();
+
+        clickCount = 0;
+        points = [];
+    }
+});
+</script>
+</body>
+</html>
