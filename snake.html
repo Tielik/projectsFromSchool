@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<style>
+    canvas {
+        align-self: center;
+        margin: 0 auto;
+        display: block;
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: white;
+
+    }
+</style>
+<body>
+    <canvas  id="canvas" class="canvas" width="400" height="400"></canvas>
+    
+    <p id="xd"></p>
+
+    <script>
+        let applex=0;
+        let appley=0;
+        let AppleEaten=false;
+        let counter=0;
+
+        class RectDrawing{
+            constructor(){
+                this.canvas=document.querySelector('.canvas');
+                this.context=this.canvas.getContext('2d');
+                this.dx=0;
+                this.dy=0;
+                this.snake=[]
+                this.makeSnake(5);
+                this.init();
+                this.pause=true;
+                setInterval(this.init,100);
+                this.MakeApple();
+
+            }
+            makeSnake=(snakeLen)=>{
+                for(let i=0;i<snakeLen;i++){
+                    this.x=this.canvas.width/2+i*10;
+                    this.y=this.canvas.height/2;
+                    this.snake.push({x:this.x+i,y:this.y})
+                }
+            }
+
+        clearCanvas=()=>{
+            this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        };
+        init=()=>{
+            document.addEventListener('keydown',this.keyDown);
+            if (!this.pause){
+            this.moveSnake();
+            }
+            this.drawSnake(); 
+            this.MakeApple();
+        };
+        keyDown=(e)=>{
+            if(this.pause) this.pause=false;
+            switch(e.keyCode){
+                case 37:
+                case 65:
+                    this.dy=0; 
+                    this.dx=-10
+                    break;
+                case 38:
+                case 87:
+                    this.dy=-10;
+                    this.dx=0;
+                    break;
+                case 39:
+                case 68:
+                    this.dy=0;
+                    this.dx=10;
+                    break;
+                case 40:
+                case 83:
+                    this.dy=10;
+                    this.dx=0;
+                    break;
+            }
+            this.init();
+        }
+        randomColor=()=>{
+            return 'rgb('+Math.round(Math.random()*255)+','+Math.round(Math.random()*255)+','+Math.round(Math.random()*255)+')';
+        }
+        drawSnake=()=>{
+            for (let i=0;i<this.snake.length;i++){
+            this.context.fillStyle=this.randomColor();
+            this.context.fillRect(this.snake[i].x,this.snake[i].y,10,10);
+            this.context.strokeStyle="white";
+            this.context.strokeRect(this.snake[i].x,this.snake[i].y,10,10);
+            }
+
+        }
+        moveSnake=()=>{
+            if (this.snake[0].x<400&&this.snake[0].y<400&&this.snake[0].x>0&&this.snake[0].y>0){
+                this.snake[0].x+=this.dx;
+                this.snake[0].y+=this.dy;
+            for(let i=this.snake.length-1;i>0;i--){
+                this.snake[i].x=this.snake[i-1].x; this.clearCanvas();
+                this.snake[i].y=this.snake[i-1].y;
+            }    
+            }else{
+                location.reload()
+            }
+            if(this.snake[0].y==appley &&this.snake[0].x>=applex){
+                this.makeSnake(1);
+                AppleEaten=false;
+                console.log("APLE")
+                this.AddPoints();
+            }
+            for(let i =2;i<this.snake.length;i++){
+                if(this.snake[0].x==this.snake[i].x && this.snake[0].y==this.snake[i].y){
+                    location.reload()
+                }
+            }
+        }
+        AddPoints=()=>{
+            counter++;
+            document.getElementById("xd").innerText="Zjedzone jabłka: "+counter;
+        }
+        MakeApple=()=>{
+            if(!AppleEaten){
+            let appleY=Math.round(1+Math.random()*39)*10;
+            let appleX=Math.round(1+Math.random()*39)*10;
+            appley=appleY
+            applex=appleX
+            this.context.fillStyle = "red";
+            this.context.fillRect(appleX, appleY, 10, 10);
+            AppleEaten=true;
+            }
+            else{
+            this.context.fillStyle = "red";
+            this.context.fillRect(applex, appley, 10, 10);
+            console.log(applex,appley)
+            }
+
+        }
+    }
+    const rectDrawing=new RectDrawing();
+    </script>
+</body>
+</html>
