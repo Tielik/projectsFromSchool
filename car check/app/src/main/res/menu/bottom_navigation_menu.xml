@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_vehicles"
+        android:icon="@drawable/ic_car"
+        android:title="Pojazdy" />
+
+    <item
+        android:id="@+id/nav_vin"
+        android:icon="@drawable/ic_vin"
+        android:title="VIN" />
+
+    <item
+        android:id="@+id/nav_fuel"
+        android:icon="@drawable/ic_fuel"
+        android:title="Paliwo" />
+
+    <item
+        android:id="@+id/nav_license"
+        android:icon="@drawable/ic_license"
+        android:title="Prawo jazdy" />
+
+</menu>
