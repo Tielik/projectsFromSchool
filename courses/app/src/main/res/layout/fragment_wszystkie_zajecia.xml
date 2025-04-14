@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#bebebe">
+
+<GridLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <Button
+        android:id="@+id/goBackBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="poprzedni dzień"
+        android:textColor="#FFFFFF"
+        android:scaleY="0.8"
+        android:scaleX="0.8"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="08.13.2025"
+        android:textSize="25dp"
+        android:textStyle="bold"
+
+        />
+
+
+    <Button
+        android:id="@+id/goForwardBTn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kolejny dzień"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="right"
+        android:scaleY="0.8"
+        android:scaleX="0.8"
+        android:textStyle="bold"
+        />
+</GridLayout>
+
+    <!--        teskt wyświtli kiedy nie ma nic w bazie danych-->
+    <TextView
+        android:id="@+id/Zajęcia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brak Zajęć"
+        android:textSize="30dp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:listitem="@layout/courses_card" />
+
+</LinearLayout>
