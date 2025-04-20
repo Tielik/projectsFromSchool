@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: gray;
+        margin: auto;
+        text-align: center;
+    }
+    canvas{
+        background-color: white;
+        top: 0;
+        left: 0;
+        margin: auto;
+        display: block;
+        border: 4px solid black;
+        
+    }
+</style>
+<body>
+    <canvas id="gameCanvas"width="400" height="600" ></canvas>
+    <p>Punkty: </p>
+</body>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const birdSize = 30;
+const birdX = canvas.width / 4;
+let birdY = canvas.height / 2;
+const gravity = 0.5;
+const jumpForce = -10;
+let birdYVelocity = 0;
+let score = 0;
+let gameSpeed = 2;
+
+class game{
+    constructor(){
+        this.punkty=0;
+
+        this.backgroundImg = new Image();
+        this.backgroundImg.src = 'img/background.jpg';
+
+        this.obstaclesImg = new Image();
+        this.obstaclesImg.src = 'img/obstacles.jpg';
+        this.obsstaclesImg2 = new Image(); 
+        this.obsstaclesImg2.src = 'img/obstacles2.jpg';
+
+        this.birdImg = new Image();
+        this.birdImg.src = 'img/bird.png';
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.birdSize = birdSize;
+        this.birdX = birdX;
+        this.birdY = birdY;
+        this.gravity = gravity;
+        this.jumpForce = jumpForce;
+        this.birdYVelocity = birdYVelocity;
+        this.obstacles = [];
+        this.score = score;
+        this.gameSpeed = gameSpeed;
+        this. makeObstacles();
+        this.gameLoop();
+    }
+
+drawBird=()=> {
+ctx.drawImage(this.birdImg, this.birdX, birdY, this.birdSize*2, this.birdSize);
+}
+
+ updateBird=()=>{
+  birdYVelocity += gravity;
+  birdY += birdYVelocity;
+
+  if (birdY >     canvas.height) {
+      this.endgame();
+  }
+  if (birdY <= 0) {
+      this.endgame();
+  }
+
+  this.obstacles.forEach(pipe => {
+      if (birdX >= pipe.top.x && birdX <= pipe.top.x + pipe.top.width) {
+          if (birdY <= pipe.top.y || birdY + this.birdSize >= pipe.bottom.y) {
+              this.endgame();
+          }
+      }
+  })
+
+}
+endgame=()=> {
+    alert('Koniec gry! Twoj wynik to: ' + this.punkty);
+    window.location.reload();
+}
+
+moveObstacles=()=> {
+for (let i = 0; i < this.obstacles.length; i++) {
+         this.obstacles[i].top.x -= gameSpeed;
+         this.obstacles[i].bottom.x -= gameSpeed;
+         if(this.obstacles[i].top.x < 0) {
+             this.obstacles.pop();
+             this.makeObstacles();
+             this.punkty+=1
+             this.updateScore();
+
+         }
+       } 
+
+}
+updateScore=()=> {
+    document.querySelector('p').innerText = `Punkty: ${this.punkty}`;
+}
+makeObstacles=()=> {
+
+let x= canvas.width;
+let y = Math.floor(Math.random() * canvas.height/2);
+
+this.obstacles.push({
+    top:{
+        x: x,
+        y: y,
+        width: 50,
+        height: 999
+    },
+    bottom:{
+        x: x,
+        y: y+250,
+        width: 50,
+        height: 999
+    }
+
+})
+}
+drawObstacles=()=> {
+  this.moveObstacles();
+
+  for (let i = 0; i < this.obstacles.length; i++) {
+    ctx.drawImage(this.obstaclesImg, this.obstacles[i].top.x, this.obstacles[i].top.y, this.obstacles[i].top.width, -this.obstacles[i].top.height);
+    ctx.drawImage(this.obsstaclesImg2 , this.obstacles[i].bottom.x, this.obstacles[i].bottom.y, this.obstacles[i].bottom.width, this.obstacles[i].bottom.height);
+      
+  }
+}
+drawBackground=()=> {
+    ctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
+}
+
+ gameLoop=()=> {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  this.drawBackground();
+  document.addEventListener('keydown', function(event) {
+    if (event.key === ' ' || event.key === 'Spacebar') {
+  birdYVelocity = jumpForce;
+    }
+  });
+  this.updateScore();
+  this.drawBird();
+  this.drawObstacles();
+  this.updateBird();
+
+  requestAnimationFrame(this.gameLoop);
+}
+
+}
+
+let Game =new game();
+</script>
+</html>
